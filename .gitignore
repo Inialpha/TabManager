@@ -42,11 +42,6 @@ coverage/
 *.tsbuildinfo
 
 # Compiled JavaScript files from TypeScript
-*.ts
-*.tsx
-*.js
-*.jsx
-*.d.ts
 
 # Local env files
 .env
