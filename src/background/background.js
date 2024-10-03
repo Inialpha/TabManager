@@ -1,8 +1,23 @@
 let maxTabs = 10;                                          let tabActivity = [];
 
 // Load max tab value from storage
+
+// Load the on installation
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.tabs.create({
+    url: 'index.html'
+  })
+});
+
+// path to setting page
+const openSettings = () => {
+  chrome.tabs.create({
+    url: 'public/options.html'
+  })
+}
+
 chrome.storage.sync.get("maxTabs", (data) => {
-        console.log(data)
+  console.log(data)
   if (data.maxTabs) {                                          maxTabs = data.maxTabs;
   }
   // Track tab activity (least recently used and least used logic)
@@ -33,3 +48,4 @@ function closeLeastRecentlyUsedTab() {
 	const leastUsedTab = tabActivity.shift(); // get and remove the first item
 	chrome.tabs.remove(leastUsedTab.id);
 }
+
