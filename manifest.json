@@ -6,13 +6,17 @@
   "permissions": [
     "tabs",
     "storage",
-    "tabGroups"
+    "tabGroups",
+    "sidePanel"
   ],
   "background": {
     "service_worker": "src/background/background.js"
   },
   "action": {
     "default_popup": "public/popup.html"
+  },
+  "side_pannel": {
+    "default_path": "public/sidepanel.html"
   },
   "options_page": "public/options.html"
 }
