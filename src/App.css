@@ -779,10 +779,6 @@ video {
   outline-offset: 2px;
 }
 
-.outline {
-  outline-style: solid;
-}
-
 .menu-bar {
   border-radius: 0.125rem;
   border-width: 1px;
