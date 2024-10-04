@@ -1,14 +1,26 @@
-import ReactDOM from 'react-dom';
 import '../App.css';
+import { createRoot } from 'react-dom/client';
+import { ChakraProvider } from '@chakra-ui/react';
+import Settings from '../components/Settings';
 
 function Options() {
   return (
-    <div>
-      <h1>Options Page</h1>
-      <p>Configure your extension here!</p>
-    </div>
+    <>
+      <div className='bg-slate-100'>
+        <header>
+          <h1>Tab Manager</h1>
+        </header>
+        
+        <Settings />
+      </div>
+    </>
   );
 }
 
-ReactDOM.render(<Options />, document.getElementById('root'));
+createRoot(document.getElementById('#root')!)
+.render(
+  <ChakraProvider>
+    <Options />
+  </ChakraProvider>
+)
 
