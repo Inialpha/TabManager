@@ -1,6 +1,19 @@
+import { useState, useEffect } from "react"
 import { Tooltip } from "@chakra-ui/react"
+import { getAllTabs } from '../utils/tabs'
+
 
 const Main = () => {
+    type TabType = chrome.tabs.Tab;
+    const [tabs, setTabs] = useState<TabType[]>([]);
+    useEffect(() => {
+        const fetchTabs = async () => {
+            const fetchedTabs = await getAllTabs();
+            setTabs(fetchedTabs);
+        };
+        fetchTabs();
+    }, []);
+   
     const handleClose = () => {
 
     }
@@ -32,22 +45,13 @@ const Main = () => {
                     </div>
                 </article>
                 
-                <Tab
-                    logo="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                    title="Cloud management console - Get started"
-                />
-                <Tab
-                    logo="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                    title="Cloud management console - Get started"
-                />
-                <Tab
-                    logo="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                    title="Cloud management console - Get started"
-                />
-                <Tab
-                    logo="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                    title="Cloud management console - Get started"
-                />
+                {tabs.map((tab: TabType) => (
+                    <Tab
+                        logo={tab.favIconUrl || ""}
+                        title="Cloud management console - Get started"
+                    />
+                    ))
+                }
             </section>
         </main>
     )
