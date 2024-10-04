@@ -48,7 +48,7 @@ const Main = () => {
                 {tabs.map((tab: TabType) => (
                     <Tab
                         logo={tab.favIconUrl || ""}
-                        title="Cloud management console - Get started"
+                        title={tab?.title}
                     />
                     ))
                 }
@@ -57,7 +57,7 @@ const Main = () => {
     )
 }
 
-export const Tab = ({logo, title}: {logo: string, title: string}) => {
+export const Tab = ({logo, title}: {logo: string, title: string | undefined}) => {
     return (
         <article className="flex space-x-2 items-center w-full py-2">
             <div className="w-4 h-4">
