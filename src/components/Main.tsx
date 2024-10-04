@@ -1,10 +1,25 @@
+import { useEffect, useState } from 'react'
+import { getAllTabs } from '../utils/tabs'
+
+type TabType = chrome.tabs.Tab;
 const Main = () => {
+    const [tabs, setTabs] = useState<TabType[]>([]);
+    useEffect(() => {
+        const fetchTabs = async () => {
+            const fetchedTabs = await getAllTabs();
+            setTabs(fetchedTabs);
+        };
+        fetchTabs();
+    }, []);
     return (
         <main className="px-3 py-1">
+	    {tabs.map((tab: TabType) => (
             <Tab
-                logo="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                logo={tab.favIconUrl || ""}
                 title="Cloud management console - Get started"
             />
+            ))
+            }
         </main>
     )
 }

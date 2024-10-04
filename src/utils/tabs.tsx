@@ -118,7 +118,7 @@ export async function getTabByWindow(windowId: number): Promise<chrome.tabs.Tab[
   return tabs;
 }
 
-const getAllTabs = async (): Promise<chrome.tabs.Tab[] | []>  => {
+export const getAllTabs = async (): Promise<chrome.tabs.Tab[] | []>  => {
   let tabs: chrome.tabs.Tab[];
   try {
     tabs = await chrome.tabs.query({});
