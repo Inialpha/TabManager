@@ -14,6 +14,10 @@ export default defineConfig({
         popup: 'src/popup/popup.html',   // Reflects the path in the tree
         options: 'src/options/options.html',  // Reflects the path in the tree
       },
+      output: {
+        entryFileNames: '[name].js',
+      },
+      watch: {},  
     },
   },
 });

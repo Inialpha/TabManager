@@ -2,19 +2,22 @@ import getMaxTap from '../utils/tabs'
 import setMaxTap from '../utils/tabs'
 import manageTap from '../utils/tabs'
 
+// Load max tab value from storage
 
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === "install") {
-    console.log("Extension installed for the first time.");
-    // Perform actions here, like setting default values, showing a welcome page, etc.
-    chrome.storage.sync.set({ maxTabs: 10 }, () => {
-      console.log("Default maxTabs value set to 10.");
-    });
-    chrome.tabs.create({ url: "welcome.html" });  // Optional: Open a welcome page
-  } else if (details.reason === "update") {
-    console.log("Extension updated to a new version.");
-  }
+// Load the on installation
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.tabs.create({
+    url: 'index.html'
+  })
 });
+
+// path to setting page
+const openSettings = () => {
+  chrome.tabs.create({
+    url: 'public/options.html'
+  })
+}
+
 
 chrome.tabs.onCreated.addListener((tab) => {
 
