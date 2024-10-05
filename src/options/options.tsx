@@ -10,7 +10,6 @@ function Options() {
         <header>
           <h1>Tab Manager</h1>
         </header>
-        
         <Settings />
       </div>
     </>

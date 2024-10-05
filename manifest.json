@@ -5,9 +5,9 @@
   "version": "1.0",
   "permissions": [
     "tabs",
+    "windows",
     "storage",
-    "tabGroups",
-    "sidePanel"
+    "tabGroups"
   ],
   "background": {
     "service_worker": "src/background/background.js"

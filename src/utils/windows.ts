@@ -4,8 +4,10 @@ export async function getAllWindows(): Promise<chrome.windows.Window[] | []> {
     populate: true,
     windowType: ["normal"]
   }
-  try {                                         windows = await chrome.windows.getAll(queryObject);
-  } catch (error) {                             console.log(error)
+  try {     
+    windows = await chrome.windows.getAll(queryObject);
+  } catch (error) {
+    console.log(error)
     windows = []
   }
   return windows;
