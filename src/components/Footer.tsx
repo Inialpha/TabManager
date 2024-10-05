@@ -13,6 +13,20 @@ const Footer = ({allTabs}: {allTabs: TabType[]}) => {
         });
     }
 
+    const openOptionsPage = () => {
+        // Opens the extension's options page
+        if (chrome.runtime.openOptionsPage) {
+            chrome.runtime.openOptionsPage(() => {
+                if (chrome.runtime.lastError) {
+                    console.error(`Error opening options page: ${chrome.runtime.lastError}`);
+                }
+            });
+        } else {
+            // Fallback in case the method is not available
+            window.open(chrome.runtime.getURL('options.html'));
+        }
+    };
+
     return (
         <footer className="font-manrope fixed w-full bottom-0 border border-t-gray-500 shadow-inner bg-white p-1">
             <ul className="flex items-center justify-between">
@@ -25,7 +39,7 @@ const Footer = ({allTabs}: {allTabs: TabType[]}) => {
                 </li>
                 <li>
                     <Tooltip hasArrow label='Settings' bg='gray.600' className="text-white">
-                        <button className="task-bar">
+                        <button onClick={openOptionsPage} className="task-bar">
                             <span className="lsicon--setting-filled"></span>
                         </button>
                     </Tooltip>
