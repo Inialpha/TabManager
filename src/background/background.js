@@ -1,5 +1,3 @@
-import { getMaxTap, setMaxTap } from '../utils/tabs'
-
 // Load max tab value from storage
 
 // Load the on installation

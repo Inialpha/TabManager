@@ -1,7 +1,7 @@
 
 
-type WindowType = chrome.windows.Window
-type WindiwTab = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
+export type WindowType = chrome.windows.Window
+export type WindiwTab = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
 
 
 export async function getOpenWindows(): Promise<(WindiwTab)[]> {
@@ -79,3 +79,15 @@ export async function getSavedWinById(windowId: number): Promise<WindowType> {
   return windows[windowId];
 }
 
+
+export async function createWindow(focused = true) {
+  try {
+    const newWindow = await chrome.windows.create({
+      focused: focused
+    });
+
+    return newWindow;
+  } catch (error) {
+    console.error("Error creating new window:", error);
+  }
+}

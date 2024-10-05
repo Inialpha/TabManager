@@ -1,52 +1,45 @@
 import { v4 as uuidv4 } from 'uuid';
+import { WindiwTab, getOpenWindows, saveWindow, getSavedWinById, createWindow } from './windows';
 
-type Tab = chrome.tabs.Tab;
-type SessionTab = {
-  id: number | undefined;
-  url: string | undefined;
-  title: string | undefined;
-  favIconUrl: string | undefined;
-};
+//type Tab = chrome.tabs.Tab;
 
 type Session = {
   name: string;
   id: string;
-  tabs: SessionTab[];
+  windowIds: number[];
   timestamp: string;
 };
 
 export async function saveSession(sessionName: string) {
-  let sessionTabs: SessionTab[] = []
-  const tabs = await chrome.tabs.query({});
 
-  sessionTabs = tabs.map((tab: Tab) => ({
-    id: tab.id,
-    url: tab.url,
-    title: tab.title,
-    favIconUrl: tab.favIconUrl
-  }));
-
+  const windows: WindiwTab[] = await getOpenWindows();
+  const windowIds: number[] = windows.map((win: WindiwTab) => win.id)
+  .filter((id): id is number => id !== undefined);
+  for (let id of windowIds) {
+    saveWindow(id);
+  }
   const sessionData: Session = {
     id: uuidv4(),
     name: sessionName,
-    tabs: sessionTabs,
+    windowIds: windowIds,
     timestamp: new Date().toISOString(),
   };
-
-   const sessions = await chrome.storage.sync.get({sessions: []});
-   sessions.push(sessionData);
-
-   chrome.storage.sync.set({sessions}, () => {
-     console.log('Session saved:', sessionName);
-  });
+   
+   const data = await chrome.storage.sync.get({sessions: {}});
+   data.sessions[sessionData.id] = sessionData;
+   await chrome.storage.sync.set({sessions: data.sessions})
 }
 
 export async function loadSession(sessionId: string) {
-  const sessions = await chrome.storage.sync.get({sessions: []});
-  const session = sessions.find((s: Session) => s.id = sessionId);
+  const data = await chrome.storage.sync.get({sessions: {}});
+  const session = data.sessions[sessionId];
   if (session) {
-    session.tabs.forEach((tab: SessionTab) => {
-      chrome.tabs.create({url: tab.url});
+    session.windowIds.forEach( async (id: number) => {
+      const win = await getSavedWinById(id);
+      const newWindow = await createWindow();
+      if (newWindow) {
+        newWindow.tabs = win.tabs;
+      }
     });
   }
 }
@@ -55,10 +48,8 @@ export async function loadSession(sessionId: string) {
 /*export function updateSession(sessionName: string, data: object) {
 }*/
 
-export async function deleteSession(sessionName: string){
-  const sessions = await chrome.storage.sync.get({sessions: []});
-
-  const updatedSessions = sessions.filter((s: Session) => s.name != sessionName)
-
-  chrome.storage.sync.set({sessions: updatedSessions});
+export async function deleteSession(sessionId: string){
+  const sessions = await chrome.storage.sync.get({sessions: {}});
+  delete sessions[sessionId];
+  chrome.storage.sync.set({sessions: sessions});
 }

@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react'
-import { getAllTabs } from '../utils/tabs'
+import { getOpenWindows } from '../utils/windows'
 
-type TabType = chrome.tabs.Tab;
+//type TabType = chrome.tabs.Tab;
+type WindowType = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
 const Main = () => {
-    const [tabs, setTabs] = useState<TabType[]>([]);
+    //const [tabs, setTabs] = useState<TabType[]>([]);
+    const [windows, setWindows] = useState<WindowType[]>([]);
     useEffect(() => {
         const fetchTabs = async () => {
-            const fetchedTabs = await getAllTabs();
-            setTabs(fetchedTabs);
+            //const fetchedTabs = await getAllTabs();
+            const fetchedWindows = await getOpenWindows();
+          
+            setWindows(fetchedWindows);
+            alert(fetchedWindows.length)
+            //setTabs(fetchedTabs);
         };
         fetchTabs();
     }, []);
     return (
         <main className="px-3 py-1">
-	    {tabs.map((tab: TabType) => (
+	    {windows.map((win) => (
             <Tab
-                logo={tab.favIconUrl || ""}
-                title="Cloud management console - Get started"
+                logo={"4"}
+                title={String(win.tabs.length)}
             />
             ))
+
             }
         </main>
     )
