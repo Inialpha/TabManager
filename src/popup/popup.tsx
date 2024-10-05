@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getAllTabs } from '../utils/tabs';
+import { getOpenWindows, WindowTab } from '../utils/windows';
 
 
 export type TabType = chrome.tabs.Tab;
@@ -13,11 +14,14 @@ export type TabType = chrome.tabs.Tab;
 function Popup() {  
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [filterTab, setFilterTab] = useState<number[]>([])
+  const [wins, setWins] = useState<WindowTab[]>([]);
 
   useEffect(() => {
       const fetchTabs = async () => {
           const fetchedTabs = await getAllTabs();
+          const fetchedWindows = await getOpenWindows();
           setTabs(fetchedTabs);
+          setWins(fetchedWindows);
       };
       fetchTabs();
   }, []);
@@ -32,7 +36,7 @@ function Popup() {
   return (
     <div className='flex flex-col w-[600px] font-manrope'>
       <Header onSearch={handleSearch} />
-      <Main allTabs={tabs} filterTabs={filterTab} />
+      <Main allWindow={wins} filterTabs={filterTab} />
       <Footer allTabs={tabs} />
     </div>
   );

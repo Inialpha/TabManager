@@ -2,40 +2,43 @@ import { Tooltip } from "@chakra-ui/react"
 import { createTab } from '../utils/tabs'
 import { Accordion, AccordionButton, AccordionPanel, Box, AccordionItem } from "@chakra-ui/react"
 import { TabType } from "../popup/popup"
+import { WindowTab } from "../utils/windows"
 
 
-const Main = ({allTabs, filterTabs}: {allTabs: TabType[], filterTabs: number[]}) => {
+const Main = ({filterTabs, allWindow}: {allWindow: WindowTab[], filterTabs: number[]}) => {
 
     return (
         <main className="border flex-1 h-[80vh] overflow-x-hidden bg-slate-100 overflow-y-auto p-1">
-            <section className="space-y-2 rounded-md bg-white mb-6 shadow-md overflow-hidden w-full h-full ">
+            <section>
                 <Accordion defaultIndex={[0]}>
-                    <AccordionItem>
-                        <article className="font-semibold font-manrope justify-between max-w-full items-center flex">
-                            <h4>
-                                <AccordionButton width={80}>
-                                    <Box as='span' flex='1' textAlign='center'>
-                                        Chrome Window 1
-                                    </Box>
-                                </AccordionButton>
-                            </h4>
-                            <Menu />
-                        </article>
-                        
-                        <AccordionPanel>
-                            {allTabs.map((tab: TabType) => (
-                                <Tab
-                                    key={tab.id}
-                                    logo={tab.favIconUrl || ""}
-                                    title={tab?.title}
-                                    active={tab.active}
-                                    tabId={tab.id}
-                                    colorCode={filterTabs.includes(tab.id!)}
-                                />
+                    {allWindow.map((win: WindowTab, idx) => (
+                        <AccordionItem className="space-y-2 rounded-md bg-white mb-6 shadow-md overflow-hidden w-full h-full">
+                            <article className="font-semibold font-manrope justify-between max-w-full items-center flex">
+                                <h4>
+                                    <AccordionButton width={80}>
+                                        <Box as='span' flex='1' textAlign='center'>
+                                            {`window ${idx + 1}`}
+                                        </Box>
+                                    </AccordionButton>
+                                </h4>
+                                <Menu />
+                            </article>
+
+                            <AccordionPanel>
+                                {win.tabs.map((tab: TabType) => (
+                                    <Tab
+                                        key={tab.id}
+                                        logo={tab.favIconUrl || ""}
+                                        title={tab?.title}
+                                        active={tab.active}
+                                        tabId={tab.id}
+                                        colorCode={filterTabs.includes(tab.id!)}
+                                    />
                                 ))
-                            }
-                        </AccordionPanel>
-                    </AccordionItem>
+                                }
+                            </AccordionPanel>
+                        </AccordionItem>
+                    ))}
                 </Accordion>
             </section>
         </main>
