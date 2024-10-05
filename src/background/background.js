@@ -1,5 +1,4 @@
-import getMaxTap from '../utils/tabs'
-import setMaxTap from '../utils/tabs'
+// import { getMaxTaps, setMaxTaps } from '../utils/tabs'
 
 // Load max tab value from storage
 
