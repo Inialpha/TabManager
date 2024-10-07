@@ -20,6 +20,8 @@ let prevDomain: string = "";
 
 const tabData: TabData = {};
 const domainData: DomainData = {};
+let inactivityTimer: number | null = null;
+const TIME_LIMIT = 1 * 60 * 1000; // Set the time limit in milliseconds (30 minutes)
 
 /*********** TAB EVENTS HANDLERS **********/
 
@@ -51,7 +53,11 @@ export const tabOnUpdated = async (tab: chrome.tabs.Tab) => {
 
         domainData[hostName].startTime = Date.now();
         domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
-        prevDomain = hostName;
+	prevDomain = hostName;
+	if (inactivityTimer) {
+        clearTimeout(inactivityTimer)
+	}
+	inactivityTimer = setTimeout(() => notifyUserOfInactivity(hostName), TIME_LIMIT);
       }
     }
   } catch (error) {
@@ -153,3 +159,13 @@ export const closeDuplicateTab = async (newTab: Tab) => {
     console.log(error);
   }
 }
+
+const notifyUserOfInactivity = (domain: string) => {
+  chrome.notifications.create({
+    type: 'basic',
+    iconUrl: 'icon.png', // Set the path to your notification icon
+    title: 'Time Alert',
+    message: `You have been on ${domain} for too long!`,
+    priority: 2,
+  });
+};
