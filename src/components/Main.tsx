@@ -10,9 +10,9 @@ const Main = ({filterTabs, allWindow}: {allWindow: WindowTab[], filterTabs: numb
     return (
         <main className="border flex-1 h-[80vh] overflow-x-hidden bg-slate-100 overflow-y-auto p-1">
             <section>
-                <Accordion defaultIndex={[0]}>
+                <Accordion defaultIndex={[0]} className='last:mb-12'>
                     {allWindow.map((win: WindowTab, idx) => (
-                        <AccordionItem className="space-y-2 rounded-md bg-white mb-6 shadow-md overflow-hidden w-full h-full">
+                        <AccordionItem className="space-y-2 rounded-md bg-white shadow-md overflow-hidden w-full h-full">
                             <article className="font-semibold font-manrope justify-between max-w-full items-center flex">
                                 <h4>
                                     <AccordionButton width={80}>

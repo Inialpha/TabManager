@@ -1,31 +1,17 @@
-import { TabType } from '../popup/popup';
 import { removeTab } from '../utils/tabs';
+import { WindowTab } from '../utils/windows';
 import './icons.css';
 import { Tooltip } from '@chakra-ui/react';
 
-const Footer = ({allTabs}: {allTabs: TabType[]}) => {
+const Footer = ({allWindow, Open}: {allWindow: WindowTab[], Open: () => void}) => {
     
     const handleRemove = async () => {
-        await allTabs.forEach((tab) => {
-            if (tab.active) {
-                removeTab(tab.index);
+        await allWindow.forEach((win) => {
+            if (win.tabs) {
+                removeTab(win.tabs[0].id!);
             }
         });
     }
-
-    const openOptionsPage = () => {
-        // Opens the extension's options page
-        if (chrome.runtime.openOptionsPage) {
-            chrome.runtime.openOptionsPage(() => {
-                if (chrome.runtime.lastError) {
-                    console.error(`Error opening options page: ${chrome.runtime.lastError}`);
-                }
-            });
-        } else {
-            // Fallback in case the method is not available
-            window.open(chrome.runtime.getURL('options.html'));
-        }
-    };
 
     return (
         <footer className="font-manrope fixed w-full bottom-0 border border-t-gray-500 shadow-inner bg-white p-1">
@@ -38,9 +24,9 @@ const Footer = ({allTabs}: {allTabs: TabType[]}) => {
                     </Tooltip>
                 </li>
                 <li>
-                    <Tooltip hasArrow label='Settings' bg='gray.600' className="text-white">
-                        <button onClick={openOptionsPage} className="task-bar">
-                            <span className="lsicon--setting-filled"></span>
+                    <Tooltip hasArrow label='Save Sessions' bg='gray.600' className="text-white">
+                        <button className="task-bar">
+                            <span className="hugeicons--folder-file-storage"></span>
                         </button>
                     </Tooltip>
                 </li>
@@ -55,6 +41,13 @@ const Footer = ({allTabs}: {allTabs: TabType[]}) => {
                     <Tooltip hasArrow label='Delete Active Tab' bg='gray.600' className="text-white">
                         <button className="task-bar" onClick={() => handleRemove()}>
                             <span className="fluent--delete-12-filled"></span>
+                        </button>
+                    </Tooltip>
+                </li>
+                <li>
+                    <Tooltip hasArrow label='Settings' bg='gray.600' className="text-white">
+                        <button onClick={Open} className="task-bar">
+                            <span className="lsicon--setting-filled"></span>
                         </button>
                     </Tooltip>
                 </li>                  

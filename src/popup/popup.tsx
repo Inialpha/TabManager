@@ -7,6 +7,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getAllTabs } from '../utils/tabs';
 import { getOpenWindows, WindowTab } from '../utils/windows';
+import OptionsPage from './option';
 
 
 export type TabType = chrome.tabs.Tab;
@@ -15,6 +16,15 @@ function Popup() {
   const [tabs, setTabs] = useState<TabType[]>([]);
   const [filterTab, setFilterTab] = useState<number[]>([])
   const [wins, setWins] = useState<WindowTab[]>([]);
+  const [view, setView] = useState<'popup' | 'options'>('popup');
+
+  const openOptionsPage = () => {
+    setView('options');
+  }
+
+  const goBack = () => {
+    setView('popup');
+  }
 
   useEffect(() => {
       const fetchTabs = async () => {
@@ -35,9 +45,15 @@ function Popup() {
 
   return (
     <div className='flex flex-col w-[600px] font-manrope'>
-      <Header onSearch={handleSearch} />
-      <Main allWindow={wins} filterTabs={filterTab} />
-      <Footer allTabs={tabs} />
+      {view === 'popup' ? (
+        <>
+          <Header onSearch={handleSearch} />
+          <Main allWindow={wins} filterTabs={filterTab} />
+          <Footer allWindow={wins} Open={openOptionsPage} />
+        </>): (
+          <OptionsPage onBack={goBack} /> 
+        )}
+      
     </div>
   );
 }
