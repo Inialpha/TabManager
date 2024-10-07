@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.menu-bar {
+    @apply p-1 shadow-inner border rounded-sm hover:bg-slate-100/50;
+}
+.task-bar {
+    @apply p-2 border rounded-sm flex items-center hover:bg-gray-800 hover:text-white justify-center;
+}

@@ -1,15 +1,13 @@
-
-
 export type WindowType = chrome.windows.Window
-export type WindiwTab = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
+export type WindowTab = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
 
 
-export async function getOpenWindows(): Promise<(WindiwTab)[]> {
+export async function getOpenWindows(): Promise<(WindowTab)[]> {
   try {
     let windows: WindowType[]  = await chrome.windows.getAll({ populate: false,
       windowTypes: ['normal', 'popup', 'panel']
     });
-    const windowsWithTabs: WindiwTab[] = await Promise.all(windows.map(async (window) => {
+    const windowsWithTabs: WindowTab[] = await Promise.all(windows.map(async (window) => {
       const tabs = await chrome.tabs.query({ windowId: window.id });
 
       return {

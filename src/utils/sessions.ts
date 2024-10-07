@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { WindiwTab, getOpenWindows, saveWindow, getSavedWinById, createWindow } from './windows';
+import { WindowTab, getOpenWindows, saveWindow, getSavedWinById, createWindow } from './windows';
 
 //type Tab = chrome.tabs.Tab;
 
@@ -12,8 +12,8 @@ type Session = {
 
 export async function saveSession(sessionName: string) {
 
-  const windows: WindiwTab[] = await getOpenWindows();
-  const windowIds: number[] = windows.map((win: WindiwTab) => win.id)
+  const windows: WindowTab[] = await getOpenWindows();
+  const windowIds: number[] = windows.map((win: WindowTab) => win.id)
   .filter((id): id is number => id !== undefined);
   for (let id of windowIds) {
     saveWindow(id);
