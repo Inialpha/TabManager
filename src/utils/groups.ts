@@ -1,6 +1,5 @@
 type Tab = chrome.tabs.Tab;
 type TabGroup = chrome.tabGroups.TabGroup;
-
 export async function groupTabsByHostname(tabs: Tab[]) {
   try {
     const grouped = tabs.reduce((acc: { [key: string]: chrome.tabs.Tab[] }, tab) => {
