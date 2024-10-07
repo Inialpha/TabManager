@@ -1,17 +1,18 @@
-import { Switch,  FormControl, FormLabel } from '@chakra-ui/react'
-import {
+import { Switch,  FormControl, FormLabel,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
-    NumberDecrementStepper,
-  } from '@chakra-ui/react'
+    NumberDecrementStepper } from '@chakra-ui/react'
+import '../App.css';
 
 const OptionsPage = ({onBack}: {onBack: () => void}) => {
     return (
         <section className="bg-slate-100 text-base">
             <header className="flex items-center bg-white space-x-4 border-b p-4 w-full">
-                <button onClick={onBack}>Back</button>
+                <button onClick={onBack}>
+                    <span className="mingcute--back-fill"></span>
+                </button>
                 <h1 className="font-bold text-lg">Option page</h1>
             </header>
             <section className="p-4 space-y-2 w-full">
@@ -22,7 +23,7 @@ const OptionsPage = ({onBack}: {onBack: () => void}) => {
                         move new tabs to a new window or remove least used tab instead.
                         <br /><i>By default: 0</i>
                     </p>
-                    <NumberInput defaultValue={0} max={15} min={0}>
+                    <NumberInput defaultValue={0} max={30} min={0}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -43,7 +44,7 @@ const OptionsPage = ({onBack}: {onBack: () => void}) => {
                     <p className='text-xs'>
                         Keep track of the time spent on an active tab to know
                     </p>
-                    <NumberInput defaultValue={2} max={24} min={0.5}>
+                    <NumberInput defaultValue={60} min={30}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />

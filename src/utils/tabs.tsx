@@ -60,7 +60,7 @@ export async function createTab(url: string): Promise<chrome.tabs.Tab | undefine
   return tab;
 }
 
-export async function removeTab(tabId: number): Promise<void> {
+export async function removeTab(tabId: any): Promise<void> {
     try {
       await chrome.tabs.remove(tabId);
     } catch(error) {

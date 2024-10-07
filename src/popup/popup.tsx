@@ -26,6 +26,13 @@ function Popup() {
     setView('popup');
   }
 
+  const createWindow = () => {
+    chrome.windows.create({focused: true});
+  }
+  const handleClose = (id: any) => {
+    chrome.windows.remove(id);
+  }
+
   useEffect(() => {
       const fetchTabs = async () => {
           const fetchedTabs = await getAllTabs();
@@ -34,7 +41,7 @@ function Popup() {
           setWins(fetchedWindows);
       };
       fetchTabs();
-  }, []);
+  }, [handleClose, createWindow]);
 
   const handleSearch = (searchQuery: string) => {
     const matchingTabs = tabs
@@ -48,8 +55,8 @@ function Popup() {
       {view === 'popup' ? (
         <>
           <Header onSearch={handleSearch} />
-          <Main allWindow={wins} filterTabs={filterTab} />
-          <Footer allWindow={wins} Open={openOptionsPage} />
+          <Main closeWins={handleClose} allWindow={wins} filterTabs={filterTab} />
+          <Footer createWins={createWindow} allWindow={wins} Open={openOptionsPage} />
         </>): (
           <OptionsPage onBack={goBack} /> 
         )}

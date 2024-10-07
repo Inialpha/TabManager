@@ -8,3 +8,7 @@
 .task-bar {
     @apply p-2 border rounded-sm flex items-center hover:bg-gray-800 hover:text-white justify-center;
 }
+
+.tab {
+    @apply flex hover:bg-blue-300 text-sm space-x-2 cursor-pointer items-center w-full py-1;
+}
