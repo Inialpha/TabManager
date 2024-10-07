@@ -91,3 +91,13 @@ export async function createWindow(focused = true) {
     console.error("Error creating new window:", error);
   }
 }
+
+function minimizeWindow(windowId: number): void {
+    chrome.windows.update(windowId, { state: 'minimized' }, () => {
+        if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError.message);
+        } else {
+            console.log(`Window ${windowId} minimized`);
+        }
+    });
+}
