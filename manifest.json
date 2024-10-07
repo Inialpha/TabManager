@@ -8,7 +8,7 @@
     "windows",
     "storage",
     "tabGroups",
-    "windows"
+    "notifications"
   ],
   "background": {
     "service_worker": "src/background/background.js"
@@ -16,6 +16,11 @@
   "action": {
     "default_popup": "public/popup.html"
   },
-  "options_page": "public/options.html"
+  "options_page": "public/options.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["src/content/content.js"]
+    }
+  ]
 }
-
