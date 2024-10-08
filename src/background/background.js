@@ -17,23 +17,13 @@ const openSettings = () => {
 }
 
 
-chrome.tabs.onCreated.addListener(tabOnCreated)
-
-
+chrome.tabs.onCreated.addListener(tabOnCreated);
 
 chrome.tabs.onUpdated.addListener(tabOnUpdated);
-/*  chrome.tabs.sendMessage(tab.id, { message: `Tab ${tab.id} createdxxxxx` });
-  tabOnUpdated(tab);
-	chrome.notifications.create({
-      type: "basic",
-title: "New Tab Created",
-      iconUrl: "public/apple.jpg",
-message: `Tab ${tab.id} created.,..!`,
-      priority: 1
-    });
-
-});*/
-
-// Attaching the callbacks to Chrome's event listeners
 chrome.tabs.onActivated.addListener(tabOnActivated);
 chrome.tabs.onRemoved.addListener(tabOnRemoved);
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('Message received in background script:', request);
+});

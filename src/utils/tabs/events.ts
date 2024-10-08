@@ -37,9 +37,10 @@ export const tabOnCreated = async (_newTab: Tab) => {
   }
 }
 
-export const tabOnUpdated = async (tab: chrome.tabs.Tab) => {
+export const tabOnUpdated = async (_tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) => {
   try {
     if (tab.id && tab.url) {
+	    chrome.tabs.sendMessage(tab.id, { message: `Tab ${tab.id} updated with ${tab.url}` });
       closeDuplicateTab(tab);
       const url = new URL(tab.url);
       const hostName = url.hostname;
@@ -91,7 +92,7 @@ export const tabOnActivated = async (activeInfo: any) => {
   }
 };
 
-export const tabOnRemoved = async (tabId: number, _: any) => {
+export const tabOnRemoved = async (tabId: number, _removeInfo: object) => {
   try {
     const closedTab = await chrome.tabs.get(tabId);
 
@@ -138,7 +139,7 @@ export async function getMaxTabs(): Promise<number> {
     maxTab = data.maxTap;
   } catch (error) {
     console.log(error);
-    maxTab = 10
+    maxTab = 20
   }
   return maxTab;
 }
