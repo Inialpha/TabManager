@@ -1,52 +1,25 @@
-import { addToGroup } from './groups';
-
 type Tab = chrome.tabs.Tab;
 
-type TabData = {
+/*type TabData = {
   [tabId: number]: {
-    totalTime: number;
     groupId: number | undefined;
     groupName: string;
   };
 };
 
+type DomainData = {
+  [domainName: string]: {
+    startTime: number
+    totalTime: number;
+  }
+}
+
+const prevDomain: string = "";
 
 const tabData: TabData = {};
+const domainData: DomainData = {};
+*/
 
-/*********** TAB EVENTS HANDLERS **********/
-
-export const tabOnCreated = async (newTab: Tab) => {
-  if (newTab.id) {
-    tabData[newTab.id] = {
-      totalTime: 0,
-      groupId: undefined,
-      groupName: ""
-    }
-  }
-  try {
-    const maxTabs = await getMaxTabs();
-    const tabs = await getAllTabs();
-    if (tabs.length > maxTabs) {
-      closeLeastRecentlyUsedTab()
-    }
-  } catch (error) {
-      console.log("Errors everywhere");
-  }
-}
-
-export const tabOnUpdated = async (tab: chrome.tabs.Tab) => {
-  try {
-    if (tab.id && tab.url) {
-      const url = new URL(tab.url);
-      const hostName = url.hostname;
-      const groupId = await addToGroup(tab.id, hostName)
-      tabData[tab.id].groupName = hostName
-      tabData[tab.id].groupId = groupId
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
 /*********** TAB CRUD FUNCTIONS ***********/
 
 export async function createTab(url: string): Promise<chrome.tabs.Tab | undefined> {
@@ -72,7 +45,7 @@ export async function removeTab(tabId: any): Promise<void> {
  * closeLeastRecentlyUsedTab
  */
 
-async function closeLeastRecentlyUsedTab() {
+export async function closeLeastRecentlyUsedTab() {
   const tabs = await getAllTabs();
   tabs.sort((a: Tab, b: Tab) => (a.lastAccessed ?? 0) - (b.lastAccessed ?? 0));
 

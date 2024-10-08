@@ -25,8 +25,10 @@ export async function groupAllTabs() {
   const tabs: Tab[] = await getAllTabs();
   const groupedTabs = groupTabsByHostname(tabs)
   for (let [hostName, tabs] of Object.entries(groupedTabs)) {
-    const tabId: number[] = tabs.map((tab: Tab) => tab.id);
-    addToGroup(tabId, hostName);
+    if (tabs.length > 1) {
+      const tabIds: number[] = tabs.map((tab: Tab) => tab.id);
+      addToGroup(tabIds, hostName);
+    }
   } 
 }
 

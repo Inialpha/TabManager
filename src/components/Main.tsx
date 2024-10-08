@@ -79,7 +79,6 @@ export const Tab = ({ logo, title, active, tabId, colorCode }: { logo: string, t
                 {active && <p className="bg-gray-800 rounded-md p-1 text-xs font-medium text-slate-50">Active</p>}
                 {selTab.has(tabId) && <p className="rounded-md border shadow-sm bg-slate-50/70 p-1 text-xs font-medium text-gray-400">selected</p>}
             </div>
-
         </article>
     )
 }

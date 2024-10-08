@@ -1,18 +1,22 @@
 export type WindowType = chrome.windows.Window
-export type WindowTab = (chrome.windows.Window & { tabs: chrome.tabs.Tab[] })
-
+export type WindowTab = (chrome.windows.Window & {
+  tabs: chrome.tabs.Tab[];
+  groups?: chrome.tabGroups.TabGroup[];
+})
 
 export async function getOpenWindows(): Promise<(WindowTab)[]> {
   try {
     let windows: WindowType[]  = await chrome.windows.getAll({ populate: false,
       windowTypes: ['normal', 'popup', 'panel']
     });
-    const windowsWithTabs: WindowTab[] = await Promise.all(windows.map(async (window) => {
-      const tabs = await chrome.tabs.query({ windowId: window.id });
+    const windowsWithTabs: WindowTab[] = await Promise.all(windows.map(async (win) => {
+      const tabs = await chrome.tabs.query({ windowId: win.id });
+      const groups = await chrome.tabGroups.query({ windowId: win.id });
 
       return {
-        ...window,
+        ...win,
         tabs,
+	groups
       };
     }));
     return windowsWithTabs;
@@ -89,3 +93,21 @@ export async function createWindow(focused = true) {
     console.error("Error creating new window:", error);
   }
 }
+
+export async function minimizeWindow(windowId: number): Promise<void> {
+  try {
+    await chrome.windows.update(windowId, { state: 'minimized' });
+  } catch(error) {
+      alert(error);
+  }
+}
+
+
+export async function closeWindow(windowId: number): Promise<void> {
+  try {
+    await chrome.windows.remove(windowId);
+  } catch(error) {
+    console.log(error);
+  }
+}
+
