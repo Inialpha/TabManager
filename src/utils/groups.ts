@@ -2,18 +2,18 @@ type Tab = chrome.tabs.Tab;
 type TabGroup = chrome.tabGroups.TabGroup;
 export async function groupTabsByHostname(tabs: Tab[]) {
   try {
-    const grouped = tabs.reduce((acc: { [key: string]: chrome.tabs.Tab[] }, tab) => {
-      const url = new URL(tab.url || "");
-      const hostname = url.hostname;
+    const grouped = tabs.reduce((acc: {[key: string]: chrome.tabs.Tab[]}, tab) => {
+      if (tab.url) {
+        const url = new URL(tab.url);
+        const hostname = url.hostname;
 
-      if (!acc[hostname]) {
-        acc[hostname] = []
+        if (!acc[hostname]) {
+          acc[hostname] = [];
+        }
+        acc[hostname].push(tab);
       }
-      acc[hostname].push(tab);
       return acc;
-   
     }, {});
-
     return grouped;
   } catch (error) {
     console.log('Error grouping tabs by hostname:', error);
@@ -22,14 +22,20 @@ export async function groupTabsByHostname(tabs: Tab[]) {
 
 
 export async function groupAllTabs() {
+ try {
   const tabs: Tab[] = await getAllTabs();
-  const groupedTabs = groupTabsByHostname(tabs)
-  for (let [hostName, tabs] of Object.entries(groupedTabs)) {
+  const groupedTabs = await groupTabsByHostname(tabs);
+  
+  const groupPromises = groupedTabs ? Object.entries(groupedTabs).map(([hostName, tabs]) => {
     if (tabs.length > 1) {
-      const tabIds: number[] = tabs.map((tab: Tab) => tab.id);
-      addToGroup(tabIds, hostName);
+      const tabIds = tabs.map(tab => tab.id).filter(id => id !== undefined) as number[];
+      return addToGroup(tabIds, hostName);
     }
-  } 
+  }) : [];
+  await Promise.all(groupPromises);
+ } catch (error) {
+  console.log('Error grouping tabs:', error);
+ }
 }
 
 export async function addToGroup(tabIds: number | number[], groupTitle: string) {

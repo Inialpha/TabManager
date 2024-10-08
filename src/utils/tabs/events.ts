@@ -1,5 +1,5 @@
-import { addToGroup } from '../groups';
-import { getAllTabs } from '../tabs';
+import { addToGroup } from "../groups";
+import { getAllTabs } from "../tabs";
 
 type Tab = chrome.tabs.Tab;
 
@@ -12,10 +12,10 @@ type TabData = {
 
 type DomainData = {
   [domainName: string]: {
-    startTime: number
+    startTime: number;
     totalTime: number;
-  }
-}
+  };
+};
 let prevDomain: string = "";
 
 const tabData: TabData = {};
@@ -30,12 +30,12 @@ export const tabOnCreated = async (_newTab: Tab) => {
     const maxTabs = await getMaxTabs();
     const tabs = await getAllTabs();
     if (tabs.length > maxTabs) {
-      closeLeastRecentlyUsedTab()
+      closeLeastRecentlyUsedTab();
     }
   } catch (error) {
-      console.log("Errors everywhere");
+    console.log("Errors everywhere");
   }
-}
+};
 
 export const tabOnUpdated = async (tab: chrome.tabs.Tab) => {
   try {
@@ -43,27 +43,31 @@ export const tabOnUpdated = async (tab: chrome.tabs.Tab) => {
       closeDuplicateTab(tab);
       const url = new URL(tab.url);
       const hostName = url.hostname;
-      const groupId = await addToGroup(tab.id, hostName)
-      tabData[tab.id].groupName = hostName
-      tabData[tab.id].groupId = groupId
+      const groupId = await addToGroup(tab.id, hostName);
+      tabData[tab.id].groupName = hostName;
+      tabData[tab.id].groupId = groupId;
       if (hostName !== prevDomain) {
         if (!domainData[hostName]) {
           domainData[hostName] = { startTime: 0, totalTime: 0 };
         }
 
         domainData[hostName].startTime = Date.now();
-        domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
-	prevDomain = hostName;
-	if (inactivityTimer) {
-        clearTimeout(inactivityTimer)
-	}
-	inactivityTimer = setTimeout(() => notifyUserOfInactivity(hostName), TIME_LIMIT);
+        domainData[prevDomain].totalTime +=
+          Date.now() - domainData[prevDomain].startTime;
+        prevDomain = hostName;
+        if (inactivityTimer) {
+          clearTimeout(inactivityTimer);
+        }
+        inactivityTimer = setTimeout(
+          () => notifyUserOfInactivity(hostName),
+          TIME_LIMIT
+        );
       }
     }
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const tabOnActivated = async (activeInfo: any) => {
   try {
@@ -79,7 +83,8 @@ export const tabOnActivated = async (activeInfo: any) => {
 
       // Stop the timer for the previous domain
       if (prevDomain && domainData[prevDomain]) {
-        domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
+        domainData[prevDomain].totalTime +=
+          Date.now() - domainData[prevDomain].startTime;
       }
 
       // Start the timer for the new domain
@@ -101,7 +106,8 @@ export const tabOnRemoved = async (tabId: number, _: any) => {
 
       // Stop timing the domain when the tab is closed
       if (domainData[hostName]) {
-        domainData[hostName].totalTime += Date.now() - domainData[hostName].startTime;
+        domainData[hostName].totalTime +=
+          Date.now() - domainData[hostName].startTime;
       }
 
       // Clean up tab data
@@ -130,7 +136,6 @@ export async function setMaxTabs(maxTabs: number): Promise<void> {
   }
 }
 
-
 export async function getMaxTabs(): Promise<number> {
   let maxTab: number;
   try {
@@ -138,7 +143,7 @@ export async function getMaxTabs(): Promise<number> {
     maxTab = data.maxTap;
   } catch (error) {
     console.log(error);
-    maxTab = 10
+    maxTab = 10;
   }
   return maxTab;
 }
@@ -155,16 +160,16 @@ export const closeDuplicateTab = async (newTab: Tab) => {
         }
       }
     });
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
 const notifyUserOfInactivity = (domain: string) => {
   chrome.notifications.create({
-    type: 'basic',
-    iconUrl: 'icon.png', // Set the path to your notification icon
-    title: 'Time Alert',
+    type: "basic",
+    iconUrl: "icon.png", // Set the path to your notification icon
+    title: "Time Alert",
     message: `You have been on ${domain} for too long!`,
     priority: 2,
   });
