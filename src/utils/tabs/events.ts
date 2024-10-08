@@ -136,7 +136,7 @@ export async function getMaxTabs(): Promise<number> {
   let maxTab: number;
   try {
     const data = await chrome.storage.sync.get("maxTabs");
-    maxTab = data.maxTap;
+    maxTab = data.maxTap || 20;
   } catch (error) {
     console.log(error);
     maxTab = 20
