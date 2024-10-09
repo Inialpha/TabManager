@@ -79,7 +79,9 @@ export async function getAllTabGroups() {
 
 async function updateTabGroup(groupId: number, data: object) {
   try {
-    await chrome.tabGroups.update(groupId, data)
+     groupId;
+     data;
+    //await chrome.tabGroups.update(groupId, data)
 
   } catch (error) {
     console.error(`Failed to update tab group: ${error}`);
