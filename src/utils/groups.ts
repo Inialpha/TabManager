@@ -36,7 +36,8 @@ export async function addToGroup(tabIds: number | number[], groupTitle: string) 
   let groupId: number | undefined;
   try {
     const group = await getGroup(groupTitle);
-
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("group: ", group);
     if (group) {
       groupId = await chrome.tabs.group({
         tabIds: tabIds,
@@ -47,7 +48,7 @@ export async function addToGroup(tabIds: number | number[], groupTitle: string) 
         tabIds: tabIds
       });
       if (groupId) {
-        await updateTabGroup(groupId, {title: groupTitle});
+        //await updateTabGroup(groupId, {title: groupTitle});
       }
     }
   } catch (error) {
@@ -77,7 +78,7 @@ export async function getAllTabGroups() {
   }
 }
 
-async function updateTabGroup(groupId: number, data: object) {
+export async function updateTabGroup(groupId: number, data: object) {
   try {
      groupId;
      data;

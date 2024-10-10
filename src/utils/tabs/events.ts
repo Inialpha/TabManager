@@ -29,25 +29,37 @@ const TIME_LIMIT = 1 * 60 * 1000; // Set the time limit in milliseconds (30 minu
 export const tabOnCreated = async (_newTab: Tab) => {
 }
 
-export const tabOnUpdated = async (_tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) => {
+export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) => {
   try {
     if (tab.id && tab.url) {
       closeDuplicateTab(tab);
       const url = new URL(tab.url);
       const hostName = url.hostname;
-      const groupId = await addToGroup(tab.id, hostName)
+      
       if (!tabData[tab.id]) {
-        tabData[tab.id] = { groupId: groupId, groupName: hostName, lastAccessed: Date.now() }
+        tabData[tab.id] = { groupName: hostName, lastAccessed: Date.now(), groupId: undefined }
       } else {
         tabData[tab.id].groupName = hostName;
-        tabData[tab.id].groupId = groupId;
-        tabData[tab.id].lastAccessed = Date.now();
+	tabData[tab.id].lastAccessed = Date.now();
       }
+      
+      const tabIds = Object.keys(tabData)
+        .map(Number) // Convert keys to numbers (tabId)
+        .filter(tabId => tabData[tabId].groupName === hostName);
+      if (tabIds.length === 1) {
+	tabIds.push(tabId);
+	console.log("number of tabs: ", tabIds.length);
+        const groupId = await addToGroup(tabIds, hostName);
+	tabData[tab.id].groupId = groupId
+      } else if (tabIds.length > 1) {
+	console.log("number of tabs: ", tabIds.length);
+        const groupId = await addToGroup(tabId, hostName);
+	tabData[tab.id].groupId = groupId
+}
+      if (!domainData[hostName]) {
+        domainData[hostName] = { startTime: 0, totalTime: 0};
+      // When a user changes the domain	      
       if (hostName !== prevDomain) {
-        if (!domainData[hostName]) {
-          domainData[hostName] = { startTime: 0, totalTime: 0 };
-        }
-
         domainData[hostName].startTime = Date.now();
 	if (prevDomain && domainData[prevDomain]) {
           domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
@@ -63,6 +75,7 @@ export const tabOnUpdated = async (_tabId: number, _changeInfo: any, tab: chrome
       if (tabs.length > maxTabs) {
         await closeLeastRecentlyUsedTab(tabs)
       }
+    }
     }
   } catch (error) {
     console.log(error);
@@ -81,14 +94,17 @@ export const tabOnActivated = async (activeInfo: any) => {
         domainData[hostName] = { startTime: 0, totalTime: 0 };
       }
 
+      // If domain is changed
+      if (hostName !== prevDomain) {
       // Stop the timer for the previous domain
-      if (prevDomain && domainData[prevDomain]) {
-        domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
-      }
+        if (prevDomain && domainData[prevDomain]) {
+          domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
+        }
 
-      // Start the timer for the new domain
-      domainData[hostName].startTime = Date.now();
-      prevDomain = hostName;
+        // Start the timer for the new domain
+        domainData[hostName].startTime = Date.now();
+        prevDomain = hostName;
+      }
     }
   } catch (error) {
     console.log("Error in tab activation:", error);

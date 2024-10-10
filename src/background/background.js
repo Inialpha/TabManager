@@ -20,5 +20,6 @@ const openSettings = () => {
 chrome.tabs.onCreated.addListener(tabOnCreated);
 
 chrome.tabs.onUpdated.addListener(tabOnUpdated);
+
 chrome.tabs.onActivated.addListener(tabOnActivated);
 chrome.tabs.onRemoved.addListener(tabOnRemoved);
