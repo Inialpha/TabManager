@@ -12,7 +12,7 @@ const Main = ({filterTabs, allWindow, closeWins}: {allWindow: WindowTab[], close
             <section>
                 <Accordion defaultIndex={[0]} className='last:mb-12'>
                     {allWindow.map((win: WindowTab, idx) => (
-                        <AccordionItem className="space-y-2 rounded-md bg-white shadow-md overflow-hidden w-full h-full">
+                        <AccordionItem key={idx} className="space-y-2 rounded-md bg-white shadow-md overflow-hidden w-full h-full">
                             <article className="font-semibold font-manrope justify-between max-w-full items-center flex">
                                 <h4>
                                     <AccordionButton width={80}>

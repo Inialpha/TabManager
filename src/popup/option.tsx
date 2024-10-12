@@ -4,9 +4,20 @@ import { Switch,  FormControl, FormLabel,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper } from '@chakra-ui/react'
+import { useState } from 'react';
 import '../App.css';
 
 const OptionsPage = ({onBack}: {onBack: () => void}) => {
+    const [timer, setTimer] = useState<number>(1200);
+    const [limit, setLimit] = useState<number>(25);
+
+    const handleLimit = () => {
+
+    }
+
+    const handleTimer = () => {
+        
+    }
     return (
         <section className="bg-slate-100 text-base">
             <header className="flex items-center bg-white space-x-4 border-b p-4 w-full">

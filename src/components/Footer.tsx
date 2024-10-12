@@ -20,6 +20,10 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
             }
         }
     }
+    const onView = () => {
+
+    }
+    
     return (
         <footer className="font-manrope fixed w-full bottom-0 border border-t-gray-500 shadow-inner bg-white p-1">
             <ul className="flex items-center justify-between">
@@ -60,7 +64,7 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
                 </li>                  
                 <li>
                     <Tooltip hasArrow label='Change to Block View' bg='gray.600' className="text-white text-xs font-manrope">
-                        <button className="task-bar">
+                        <button onClick={onView} className="task-bar">
                             <span className="typcn--th-list-outline"></span> 
                         </button>
                     </Tooltip>

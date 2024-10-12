@@ -1,5 +1,5 @@
-import { addToGroup } from '../groups';
-import { getAllTabs } from '../tabs';
+import { addToGroup } from "../groups";
+import { getAllTabs } from "../tabs";
 
 type Tab = chrome.tabs.Tab;
 
@@ -13,10 +13,10 @@ type TabData = {
 
 type DomainData = {
   [domainName: string]: {
-    startTime: number
+    startTime: number;
     totalTime: number;
-  }
-}
+  };
+};
 let prevDomain: string = "";
 
 const tabData: TabData = {};
@@ -27,7 +27,16 @@ let inactivityTimer: number | null = null;
 /*********** TAB EVENTS HANDLERS **********/
 
 export const tabOnCreated = async (_newTab: Tab) => {
-}
+  try {
+    const maxTabs = await getMaxTabs();
+    const tabs = await getAllTabs();
+    if (tabs.length > maxTabs) {
+      closeLeastRecentlyUsedTab();
+    }
+  } catch (error) {
+    console.log("Errors everywhere");
+  }
+};
 
 export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) => {
   try {
@@ -35,6 +44,14 @@ export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.
       closeDuplicateTab(tab);
       console.log("url,..:", tab.url);
       const url = new URL(tab.url);
+      const hostName = url.hostname;
+      const groupId = await addToGroup(tab.id, hostName);
+      tabData[tab.id].groupName = hostName;
+      tabData[tab.id].groupId = groupId;
+      if (hostName !== prevDomain) {
+        if (!domainData[hostName]) {
+          domainData[hostName] = { startTime: 0, totalTime: 0 };
+        }
 
       const hostName = url.hostname;
       console.log("host..:", hostName);
@@ -83,7 +100,7 @@ export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const tabOnActivated = async (activeInfo: any) => {
   try {
@@ -100,9 +117,10 @@ export const tabOnActivated = async (activeInfo: any) => {
       // If domain is changed
       if (hostName !== prevDomain) {
       // Stop the timer for the previous domain
-        if (prevDomain && domainData[prevDomain]) {
-          domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
-        }
+      if (prevDomain && domainData[prevDomain]) {
+        domainData[prevDomain].totalTime +=
+          Date.now() - domainData[prevDomain].startTime;
+      }
 
         // Start the timer for the new domain
         domainData[hostName].startTime = Date.now();
@@ -120,7 +138,8 @@ export const tabOnRemoved = async (tabId: number, _removeInfo: object) => {
       const hostName = tabData[tabId].groupName;
 
       if (domainData[hostName]) {
-        domainData[hostName].totalTime += Date.now() - domainData[hostName].startTime;
+        domainData[hostName].totalTime +=
+          Date.now() - domainData[hostName].startTime;
       }
     }
 
@@ -153,7 +172,6 @@ export async function setMaxTabs(maxTabs: number): Promise<void> {
   }
 }
 
-
 export async function getMaxTabs(): Promise<number> {
   let maxTab: number;
   try {
@@ -178,8 +196,8 @@ export const closeDuplicateTab = async (newTab: Tab) => {
 	  break;
         }
       }
-    };
-  } catch(error) {
+    });
+  } catch (error) {
     console.log(error);
   }
 }
