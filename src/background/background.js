@@ -1,4 +1,5 @@
-import { tabOnUpdated, tabOnCreated, tabOnActivated, tabOnRemoved } from '../utils/tabs/events'
+import { tabOnUpdated } from '../utils/tabs/events'
+//import { tabOnCreated, tabOnActivated, tabOnRemoved} from '../utils/tabs/events'
 
 // Load max tab value from storage
 
@@ -17,13 +18,7 @@ const openSettings = () => {
 }
 
 
-chrome.tabs.onCreated.addListener(tabOnCreated);
-
+//chrome.tabs.onCreated.addListener(tabOnCreated);
 chrome.tabs.onUpdated.addListener(tabOnUpdated);
-chrome.tabs.onActivated.addListener(tabOnActivated);
-chrome.tabs.onRemoved.addListener(tabOnRemoved);
-
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('Message received in background script:', request);
-});
+//chrome.tabs.onActivated.addListener(tabOnActivated);
+//chrome.tabs.onRemoved.addListener(tabOnRemoved);
