@@ -26,76 +26,70 @@ let inactivityTimer: number | null = null;
 
 /*********** TAB EVENTS HANDLERS **********/
 
-export const tabOnCreated = async (_newTab: Tab) => {
-  try {
-    const maxTabs = await getMaxTabs();
-    const tabs = await getAllTabs();
-    if (tabs.length > maxTabs) {
-      closeLeastRecentlyUsedTab();
-    }
-  } catch (error) {
-    console.log("Errors everywhere");
-  }
-};
+export const tabOnCreated = async (_newTab: Tab) => {};
 
-export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.tabs.Tab) => {
+export const tabOnUpdated = async (
+  tabId: number,
+  _changeInfo: any,
+  tab: chrome.tabs.Tab
+) => {
   try {
     if (tab.id && tab.url) {
       closeDuplicateTab(tab);
-      console.log("url,..:", tab.url);
       const url = new URL(tab.url);
       const hostName = url.hostname;
-      const groupId = await addToGroup(tab.id, hostName);
-      tabData[tab.id].groupName = hostName;
-      tabData[tab.id].groupId = groupId;
-      if (hostName !== prevDomain) {
-        if (!domainData[hostName]) {
-          domainData[hostName] = { startTime: 0, totalTime: 0 };
-        }
 
-      const hostName = url.hostname;
-      console.log("host..:", hostName);
       if (!tabData[tab.id]) {
-        tabData[tab.id] = { groupName: hostName, lastAccessed: Date.now(), groupId: undefined }
+        tabData[tab.id] = {
+          groupName: hostName,
+          lastAccessed: Date.now(),
+          groupId: undefined,
+        };
+        
       } else {
         tabData[tab.id].groupName = hostName;
-	tabData[tab.id].lastAccessed = Date.now();
-      }
-      
-      const tabIds = Object.keys(tabData)
-        .map(Number) // Convert keys to numbers (tabId)
-        .filter(tabId => tabData[tabId].groupName === hostName);
-      if (tabIds.length === 1) {
-	tabIds.push(tabId);
-	console.log("number of tabs: ", tabIds.length);
-        const groupId = await addToGroup(tabIds, hostName);
-	tabData[tab.id].groupId = groupId
-      } else if (tabIds.length > 1) {
-	console.log("number of tabs: ", tabIds.length);
-        const groupId = await addToGroup(tabId, hostName);
-	tabData[tab.id].groupId = groupId
-}
-      if (!domainData[hostName]) {
-        domainData[hostName] = { startTime: 0, totalTime: 0};
-      // When a user changes the domain	      
-      console.log(hostName, prevDomain)
-      if (hostName !== prevDomain) {
-        domainData[hostName].startTime = Date.now();
-	if (prevDomain && domainData[prevDomain]) {
-          domainData[prevDomain].totalTime += Date.now() - domainData[prevDomain].startTime;
-	}
-	prevDomain = hostName;
-	if (inactivityTimer) {
-        clearTimeout(inactivityTimer)
-	}
-	inactivityTimer = setTimeout(() => notifyUserOfInactivity(hostName), 100);
+        tabData[tab.id].lastAccessed = Date.now();
       }
       const maxTabs = await getMaxTabs();
       const tabs = await getAllTabs();
       if (tabs.length > maxTabs) {
-        await closeLeastRecentlyUsedTab(tabs)
+        await closeLeastRecentlyUsedTab(tabs);
       }
-    }
+      /*
+      const tabIds = Object.keys(tabData)
+        .map(Number) // Convert keys to numbers (tabId)
+        .filter((tabId) => tabData[tabId].groupName === hostName);
+      if (tabIds.length === 2) {
+        tabIds.push(tabId);
+        console.log("number of tabs: ", tabIds.length);
+        const groupId = await addToGroup(tabIds, hostName);
+        tabData[tab.id].groupId = groupId;
+      } else if (tabIds.length > 2) {
+        console.log("number of tabs: ", tabIds.length);
+        const groupId = await addToGroup(tabId, hostName);
+        tabData[tab.id].groupId = groupId;
+      }*/
+      /*
+      if (!domainData[hostName]) {
+        domainData[hostName] = { startTime: 0, totalTime: 0 };
+        // When a user changes the domain
+        if (hostName !== prevDomain) {
+          domainData[hostName].startTime = Date.now();
+          if (prevDomain && domainData[prevDomain]) {
+            domainData[prevDomain].totalTime +=
+              Date.now() - domainData[prevDomain].startTime;
+          }
+          prevDomain = hostName;
+          if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+          }
+          inactivityTimer = setTimeout(
+            () => notifyUserOfInactivity(hostName),
+            TIME_LIMIT
+          );
+        }
+        
+      }*/
     }
   } catch (error) {
     console.log(error);
@@ -110,17 +104,23 @@ export const tabOnActivated = async (activeInfo: any) => {
       const url = new URL(tab.url);
       const hostName = url.hostname;
 
+      tabData[activeInfo.tabId] = {
+        groupName: hostName,
+        lastAccessed: Date.now(),
+        groupId: undefined,
+      };
+
       if (!domainData[hostName]) {
         domainData[hostName] = { startTime: 0, totalTime: 0 };
       }
 
       // If domain is changed
       if (hostName !== prevDomain) {
-      // Stop the timer for the previous domain
-      if (prevDomain && domainData[prevDomain]) {
-        domainData[prevDomain].totalTime +=
-          Date.now() - domainData[prevDomain].startTime;
-      }
+        // Stop the timer for the previous domain
+        if (prevDomain && domainData[prevDomain]) {
+          domainData[prevDomain].totalTime +=
+            Date.now() - domainData[prevDomain].startTime;
+        }
 
         // Start the timer for the new domain
         domainData[hostName].startTime = Date.now();
@@ -142,19 +142,18 @@ export const tabOnRemoved = async (tabId: number, _removeInfo: object) => {
           Date.now() - domainData[hostName].startTime;
       }
     }
-
   } catch (error) {
     console.log("Error in tab removal:", error);
   }
 };
 
 export async function closeLeastRecentlyUsedTab(_tabs: Tab[]) {
-
   try {
-    const sortedTabs = Object.entries(tabData)
-      .sort(([, a], [, b]) => a.lastAccessed - b.lastAccessed)
+    const sortedTabs = Object.entries(tabData).sort(
+      ([, a], [, b]) => a.lastAccessed - b.lastAccessed
+    );
     if (sortedTabs.length > 0) {
-      const oldestTab  = sortedTabs[0];
+      const oldestTab = sortedTabs[0];
       const id: number = Number(oldestTab[0]);
       delete tabData[id];
       await chrome.tabs.remove(Number(oldestTab[0]));
@@ -179,7 +178,7 @@ export async function getMaxTabs(): Promise<number> {
     maxTab = data.maxTap || 20;
   } catch (error) {
     console.log(error);
-    maxTab = 20
+    maxTab = 20;
   }
   return maxTab;
 }
@@ -193,21 +192,20 @@ export const closeDuplicateTab = async (newTab: Tab) => {
 
         if (tabUrl === newTab.url && tab.id) {
           await chrome.tabs.remove(tab.id);
-	  break;
+          break;
         }
       }
-    });
+    }
   } catch (error) {
     console.log(error);
   }
 }
 
 const notifyUserOfInactivity = (domain: string) => {
-	console.log("timer ran", domain);
   chrome.notifications.create({
-    type: 'basic',
-    iconUrl: 'public/apple.jpg', // Set the path to your notification icon
-    title: 'Time Alert',
+    type: "basic",
+    iconUrl: "public/apple.png", // Set the path to your notification icon
+    title: "Time Alert",
     message: `You have been on ${domain} for too long!`,
     priority: 1,
   });

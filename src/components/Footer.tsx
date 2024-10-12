@@ -1,3 +1,5 @@
+import { groupAllTabs } from '../utils/groups';
+import { saveSession } from '../utils/sessions';
 import { removeTab } from '../utils/tabs';
 import { WindowTab } from '../utils/windows';
 import './icons.css';
@@ -23,6 +25,12 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
     const onView = () => {
 
     }
+    const handleGroup = async () => {
+        await groupAllTabs();
+    }
+    const handleSession = async (name: string) => {
+        await saveSession(name);
+    }
     
     return (
         <footer className="font-manrope fixed w-full bottom-0 border border-t-gray-500 shadow-inner bg-white p-1">
@@ -35,6 +43,13 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
                     </Tooltip>
                 </li>
                 <li>
+                    <Tooltip hasArrow label='Groupby Host' bg='gray.600' className="text-white">
+                        <button onClick={handleGroup} className="task-bar">
+                            <span className="pixelarticons--group"></span>
+                        </button>
+                    </Tooltip>
+                </li>
+                <li>
                     <Tooltip hasArrow label='Save Sessions' bg='gray.600' className="text-white">
                         <button className="task-bar">
                             <span className="hugeicons--folder-file-storage"></span>
@@ -42,9 +57,9 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
                     </Tooltip>
                 </li>
                 <li>
-                    <Tooltip hasArrow label='Set timer' bg='gray.600' className="text-white">
+                    <Tooltip hasArrow label='Load sessions' bg='gray.600' className="text-white">
                         <button className="task-bar">
-                            <span className="ion--timer-outline"></span>
+                            <span className="carbon--mobile-session"></span>
                         </button>
                     </Tooltip>
                 </li>
