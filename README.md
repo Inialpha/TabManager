@@ -39,13 +39,13 @@ TabManager requires the following permissions:
    npm config set legacy-peer-deps true
    ```
 3. Install dependencies:
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 4. Build the project:
-   \`\`\`bash
+   ```bash
    npm run build
-   \`\`\`
+   ```
 5. Go to `chrome://extensions/` in your Chrome browser.
 6. Enable **Developer Mode** in the top right corner.
 7. Click **Load unpacked** and select the `dist` folder from the cloned repository.
