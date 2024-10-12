@@ -5,14 +5,15 @@ import { Switch,  FormControl, FormLabel,
     NumberIncrementStepper,
     NumberDecrementStepper } from '@chakra-ui/react'
 import '../App.css';
-import { setMaxTabs } from '../utils/tabs';
+// import { setMaxTabs } from '../utils/tabs';
 
-const OptionsPage = async ({onBack}: {onBack: () => void}) => {
+const OptionsPage =  ({onBack}: {onBack: () => void}) => {
 
-    const handleLimit = (val: number) => {
+/*    const handleLimit = (val: number) => {
         // limit set here
         setMaxTabs(val);
     }
+*/
 
     return (
         <section className="bg-slate-100 text-base">
