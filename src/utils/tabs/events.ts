@@ -1,4 +1,4 @@
-import { addToGroup } from "../groups";
+// import { addToGroup } from "../groups";
 import { getAllTabs } from "../tabs";
 
 type Tab = chrome.tabs.Tab;
@@ -21,7 +21,7 @@ let prevDomain: string = "";
 
 const tabData: TabData = {};
 const domainData: DomainData = {};
-let inactivityTimer: number | null = null;
+// let inactivityTimer: number | null = null;
 // const TIME_LIMIT = 1 * 60 * 1000; // Set the time limit in milliseconds (30 minutes)
 
 /*********** TAB EVENTS HANDLERS **********/
@@ -29,7 +29,7 @@ let inactivityTimer: number | null = null;
 export const tabOnCreated = async (_newTab: Tab) => {};
 
 export const tabOnUpdated = async (
-  tabId: number,
+  _tabId: number,
   _changeInfo: any,
   tab: chrome.tabs.Tab
 ) => {
@@ -201,7 +201,7 @@ export const closeDuplicateTab = async (newTab: Tab) => {
   }
 }
 
-const notifyUserOfInactivity = (domain: string) => {
+export const notifyUserOfInactivity = (domain: string) => {
   chrome.notifications.create({
     type: "basic",
     iconUrl: "public/apple.png", // Set the path to your notification icon
