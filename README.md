@@ -31,13 +31,13 @@ TabManager requires the following permissions:
 ### Manual Installation
 
 1. Clone this repository:
-   \`\`\`bash
+   ```bash
    https://github.com/Inialpha/TabManager.git
-   \`\`\`
+   ```
 2. Disable peer dependency
-   \`\`\`bash
+   ```bash
    npm config set legacy-peer-deps true
-   \`\`\`
+   ```
 3. Install dependencies:
    \`\`\`bash
    npm install
@@ -57,11 +57,8 @@ TabManager requires the following permissions:
 - **Time Management Alerts**: Set time limits for domains, and receive notifications when you spend too much time on a specific website. -->
 
 
-## Author
+## Authors
 
-**[Your Name]**
 
-- **Email**: [your-email@example.com](mailto:your-email@example.com)
-- **Twitter**: [@yourhandle](https://twitter.com/yourhandle)
-- **GitHub**: [github.com/yourusername](https://github.com/yourusername)
-- **LinkedIn**: [linkedin.com/in]
+- **Inimfon Ebong**: [Email](inimfonebong001@gmail.com) [Twitter](https://twitter.com/Inimfon_Tech) [GitHub](https://github.com/Inialpha) [LinkedIn](https://www.linkedin.com/in/inimfon-ebong)
+- **Abdulrasheed Aliyu**: [Email](rashnotech@gmail.com) [Twitter]() [GitHub](https://github.com/Rashnotech) [LinkedIn]()
