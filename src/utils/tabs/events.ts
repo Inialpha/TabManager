@@ -22,7 +22,7 @@ let prevDomain: string = "";
 const tabData: TabData = {};
 const domainData: DomainData = {};
 let inactivityTimer: number | null = null;
-const TIME_LIMIT = 1 * 60 * 1000; // Set the time limit in milliseconds (30 minutes)
+// const TIME_LIMIT = 1 * 60 * 1000; // Set the time limit in milliseconds (30 minutes)
 
 /*********** TAB EVENTS HANDLERS **********/
 
@@ -33,9 +33,11 @@ export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.
   try {
     if (tab.id && tab.url) {
       closeDuplicateTab(tab);
+      console.log("url,..:", tab.url);
       const url = new URL(tab.url);
+
       const hostName = url.hostname;
-      
+      console.log("host..:", hostName);
       if (!tabData[tab.id]) {
         tabData[tab.id] = { groupName: hostName, lastAccessed: Date.now(), groupId: undefined }
       } else {
@@ -59,6 +61,7 @@ export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.
       if (!domainData[hostName]) {
         domainData[hostName] = { startTime: 0, totalTime: 0};
       // When a user changes the domain	      
+      console.log(hostName, prevDomain)
       if (hostName !== prevDomain) {
         domainData[hostName].startTime = Date.now();
 	if (prevDomain && domainData[prevDomain]) {
@@ -68,7 +71,7 @@ export const tabOnUpdated = async (tabId: number, _changeInfo: any, tab: chrome.
 	if (inactivityTimer) {
         clearTimeout(inactivityTimer)
 	}
-	inactivityTimer = setTimeout(() => notifyUserOfInactivity(hostName), TIME_LIMIT);
+	inactivityTimer = setTimeout(() => notifyUserOfInactivity(hostName), 100);
       }
       const maxTabs = await getMaxTabs();
       const tabs = await getAllTabs();
@@ -182,13 +185,13 @@ export const closeDuplicateTab = async (newTab: Tab) => {
 }
 
 const notifyUserOfInactivity = (domain: string) => {
-	console.log("timer ran");
+	console.log("timer ran", domain);
   chrome.notifications.create({
     type: 'basic',
-    iconUrl: 'public/apple.png', // Set the path to your notification icon
+    iconUrl: 'public/apple.jpg', // Set the path to your notification icon
     title: 'Time Alert',
     message: `You have been on ${domain} for too long!`,
-    priority: 2,
+    priority: 1,
   });
 };
 

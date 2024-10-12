@@ -16,7 +16,6 @@
   "action": {
     "default_popup": "public/popup.html"
   },
-  "options_page": "public/options.html",
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],

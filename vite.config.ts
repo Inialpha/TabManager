@@ -23,7 +23,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: 'public/popup.html',   // Reflects the path in the tree
-        options: 'public/options.html',  // Reflects the path in the tree
+        //options: 'public/options.html',  // Reflects the path in the tree
       },
       output: {
         entryFileNames: '[name].js',
