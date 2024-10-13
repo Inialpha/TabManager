@@ -1,4 +1,0 @@
-#!/bin/bash
-
-zip -r dist.zip dist
-cp dist.zip ../../sdcard/

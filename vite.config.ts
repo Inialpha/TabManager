@@ -19,17 +19,5 @@ export default defineConfig({
     viteManifestHackIssue846,
     crx({ manifest }),
   ],
-  build: {
-    rollupOptions: {
-      input: {
-        popup: 'public/popup.html',   // Reflects the path in the tree
-        //options: 'public/options.html',  // Reflects the path in the tree
-      },
-      output: {
-        entryFileNames: '[name].js',
-      },
-      watch: {},  
-    },
-  },
 });
 

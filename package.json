@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "npm config set legacy-peer-deps true",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npm config set legacy-peer-deps true"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.9.4",
