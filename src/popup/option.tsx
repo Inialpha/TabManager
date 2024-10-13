@@ -6,23 +6,15 @@ import { Switch,  FormControl, FormLabel,
     NumberDecrementStepper } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import '../App.css';
-import { getMaxTabs, setMaxTabs } from '../utils/tabs';
+// import { setMaxTabs } from '../utils/tabs';
 
-const OptionsPage = ({onBack}: {onBack: () => void}) => {
-    const [limit, setLimit] = useState<number>(0);
-    const handleLimit = (valueAsString: string, valueAsNumber: number) => {
-        // Set the new value for maxTabs
-        setMaxTabs(valueAsNumber);
-        valueAsString
-    };
+const OptionsPage =  ({onBack}: {onBack: () => void}) => {
 
-    useEffect(() => {
-        const fetchTabs = async () => {
-            const max = await getMaxTabs();
-            setLimit(max);
-        }
-        fetchTabs();
-    }, [handleLimit]);
+/*    const handleLimit = (val: number) => {
+        // limit set here
+        setMaxTabs(val);
+    }
+*/
 
     return (
         <section className="bg-slate-100 text-base">

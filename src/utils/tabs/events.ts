@@ -1,4 +1,4 @@
-//import { addToGroup } from "../groups";
+// import { addToGroup } from "../groups";
 import { getAllTabs } from "../tabs";
 
 type Tab = chrome.tabs.Tab;
@@ -29,6 +29,7 @@ const domainData: DomainData = {};
 export const tabOnCreated = async (_newTab: Tab) => {};
 
 export const tabOnUpdated = async (
+  _tabId: number,
   _changeInfo: any,
   tab: chrome.tabs.Tab
 ) => {
@@ -200,8 +201,7 @@ export const closeDuplicateTab = async (newTab: Tab) => {
   }
 }
 
-/*
-const notifyUserOfInactivity = (domain: string) => {
+export const notifyUserOfInactivity = (domain: string) => {
   chrome.notifications.create({
     type: "basic",
     iconUrl: "public/apple.png", // Set the path to your notification icon
@@ -209,7 +209,7 @@ const notifyUserOfInactivity = (domain: string) => {
     message: `You have been on ${domain} for too long!`,
     priority: 1,
   });
-};*/
+};
 
 export async function moveTabToNewWindow(tab: Tab) {
   try {
