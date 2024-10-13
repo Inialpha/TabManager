@@ -10,13 +10,6 @@ chrome.runtime.onInstalled.addListener(() => {
   })
 });
 
-// path to setting page
-const openSettings = () => {
-  chrome.tabs.create({
-    url: 'public/options.html'
-  })
-}
-
 
 //chrome.tabs.onCreated.addListener(tabOnCreated);
 chrome.tabs.onUpdated.addListener(tabOnUpdated);
