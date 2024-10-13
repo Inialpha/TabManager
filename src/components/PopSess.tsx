@@ -1,6 +1,6 @@
 import { Popover, PopoverBody, PopoverCloseButton, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow } from "@chakra-ui/react" 
 import { useEffect, useState } from "react";
-import { getSessions, deleteSession, loadSession } from "../utils/sessions";
+import { getSessions } from "../utils/sessions";
 
 const PopSess = () => {
 
@@ -49,8 +49,8 @@ const PopSess = () => {
                             session.map((sess, index) => (
                                 <li key={index}>
                                     {sess}
-                                    <button onClick={() => loadSession(sess)}>Load</button>
-                                    <button onClick={() => deleteSession(sess)}>Delete</button>
+                                    {/*<button onClick={() => loadSession(sess)}>Load</button>
+                                    <button onClick={() => deleteSession(sess)}>Delete</button>*/}
                                 </li>
                             ))
                         ) : (
