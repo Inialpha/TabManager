@@ -6,7 +6,7 @@ import { tabOnUpdated } from '../utils/tabs/events'
 // Load the on installation
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.create({
-    url: 'public/index.html'
+    url: 'index.html'
   })
 });
 
