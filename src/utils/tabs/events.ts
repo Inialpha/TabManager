@@ -29,6 +29,7 @@ const domainData: DomainData = {};
 export const tabOnCreated = async (_newTab: Tab) => {};
 
 export const tabOnUpdated = async (
+  _tabId: number,
   _changeInfo: any,
   tab: chrome.tabs.Tab
 ) => {

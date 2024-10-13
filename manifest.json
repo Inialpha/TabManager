@@ -10,13 +10,6 @@
     "tabGroups",
     "notifications"
   ],
-  "web_accessible_resources": [{
-    "resources": [
-      "index.html",    
-      "public/index.html" 
-    ],
-    "matches": ["<all_urls>"]
-  }],
   "background": {
     "service_worker": "src/background/background.js"
   },

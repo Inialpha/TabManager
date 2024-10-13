@@ -12,8 +12,8 @@ const OptionsPage = ({onBack}: {onBack: () => void}) => {
     const [limit, setLimit] = useState<number>(0);
     const handleLimit = (valueAsString: string, valueAsNumber: number) => {
         // Set the new value for maxTabs
+        void valueAsString;
         setMaxTabs(valueAsNumber);
-        valueAsString
     };
 
     useEffect(() => {
