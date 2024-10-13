@@ -1,4 +1,5 @@
 import { groupAllTabs } from '../utils/groups';
+// import { saveSession } from '../utils/sessions';
 import { removeTab } from '../utils/tabs';
 import { WindowTab } from '../utils/windows';
 import './icons.css';
@@ -32,6 +33,9 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
     const handleGroup = async () => {
         await groupAllTabs();
     }
+    /*const handleSession = async (name: string) => {
+        await saveSession(name);
+    }*/
     
     return (
         <footer className="font-manrope fixed w-full bottom-0 border border-t-gray-500 shadow-inner bg-white p-1">

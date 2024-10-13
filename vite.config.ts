@@ -22,13 +22,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        popup: 'public/popup.html',   // Reflects the path in the tree
-        //options: 'public/options.html',  // Reflects the path in the tree
+        popup: 'public/popup.html',
+	index: 'index.html'
       },
       output: {
         entryFileNames: '[name].js',
       },
-      watch: {},  
+      watch: {},
     },
   },
 });
