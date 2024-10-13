@@ -4,7 +4,6 @@ import { Switch,  FormControl, FormLabel,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper } from '@chakra-ui/react'
-import { useEffect, useState } from 'react';
 import '../App.css';
 // import { setMaxTabs } from '../utils/tabs';
 
@@ -32,7 +31,7 @@ const OptionsPage =  ({onBack}: {onBack: () => void}) => {
                         move new tabs to a new window or remove least used tab instead.
                         <br /><i>By default: 0</i>
                     </p>
-                    <NumberInput onChange={handleLimit} value={limit} defaultValue={0} max={30} min={0}>
+                    <NumberInput defaultValue={0} max={30} min={0}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
