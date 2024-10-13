@@ -71,7 +71,7 @@ export async function getMaxTabs(): Promise<number> {
     maxTab = data.maxTabs || 25;
   } catch (error) {
     console.log(error);
-    maxTab = 25
+    maxTab = 30
   }
   return maxTab;
 }
