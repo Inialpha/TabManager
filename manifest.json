@@ -14,7 +14,8 @@
     "service_worker": "src/background/background.js"
   },
   "action": {
-    "default_popup": "public/popup.html"
+    "default_popup": "public/popup.html",
+    "default_icon": "public/tab_manager.png"
   },
   "options_page": "public/options.html",
   "content_scripts": [

@@ -7,6 +7,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { getAllTabs } from '../utils/tabs';
 import { getOpenWindows, WindowTab } from '../utils/windows';
+import { getSessions } from '../utils/sessions';
 import OptionsPage from './option';
 
 

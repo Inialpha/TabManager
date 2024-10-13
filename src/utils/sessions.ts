@@ -3,7 +3,7 @@ import { WindowTab, getOpenWindows, saveWindow, getSavedWinById, createWindow } 
 
 //type Tab = chrome.tabs.Tab;
 
-type Session = {
+export type Session = {
   name: string;
   id: string;
   windowIds: number[];
@@ -42,6 +42,11 @@ export async function loadSession(sessionId: string) {
       }
     });
   }
+}
+
+export async function getSessions() {
+  const data = await chrome.storage.sync.get({sessions: {}});
+  return data.sessions;
 }
 
 

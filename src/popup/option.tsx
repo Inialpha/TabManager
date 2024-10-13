@@ -4,15 +4,24 @@ import { Switch,  FormControl, FormLabel,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper } from '@chakra-ui/react'
+import { useEffect, useState } from 'react';
 import '../App.css';
-import { setMaxTabs } from '../utils/tabs';
+import { getMaxTabs, setMaxTabs } from '../utils/tabs';
 
-const OptionsPage = async ({onBack}: {onBack: () => void}) => {
+const OptionsPage = ({onBack}: {onBack: () => void}) => {
+    const [limit, setLimit] = useState<number>(0);
+    const handleLimit = (valueAsString: string, valueAsNumber: number) => {
+        // Set the new value for maxTabs
+        setMaxTabs(valueAsNumber);
+    };
 
-    const handleLimit = (val: number) => {
-        // limit set here
-        setMaxTabs(val);
-    }
+    useEffect(() => {
+        const fetchTabs = async () => {
+            const max = await getMaxTabs();
+            setLimit(max);
+        }
+        fetchTabs();
+    }, [handleLimit]);
 
     return (
         <section className="bg-slate-100 text-base">
@@ -30,7 +39,7 @@ const OptionsPage = async ({onBack}: {onBack: () => void}) => {
                         move new tabs to a new window or remove least used tab instead.
                         <br /><i>By default: 0</i>
                     </p>
-                    <NumberInput defaultValue={0} max={30} min={0}>
+                    <NumberInput onChange={handleLimit} value={limit} defaultValue={0} max={30} min={0}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -43,21 +52,8 @@ const OptionsPage = async ({onBack}: {onBack: () => void}) => {
                     </FormControl>
                    <FormControl>
                         <FormLabel className='font-semibold text-sm'>Remove least used tab</FormLabel>
-                        <Switch colorScheme='teal' size='lg' />
+                        <Switch colorScheme='teal' isChecked size='lg' />
                     </FormControl>
-                </article>
-                <article className="rounded-sm bg-white w-full px-4 py-2">
-                    <h2 className="font-semibold">Timer</h2>
-                    <p className='text-xs'>
-                        Keep track of the time spent on an active tab to know
-                    </p>
-                    <NumberInput defaultValue={60} min={30}>
-                        <NumberInputField />
-                        <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                        </NumberInputStepper>
-                    </NumberInput>
                 </article>
                 <article className="rounded-sm bg-white w-full px-4 py-2">
                     <h2 className="font-semibold">Advance settings</h2>

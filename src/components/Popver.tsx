@@ -1,26 +1,49 @@
-import { Popover, ButtonGroup, PopoverFooter, Box, PopoverBody, PopoverCloseButton, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, Button } from "@chakra-ui/react"
-import { useRef } from "react"
+import { Popover, Input, ButtonGroup, PopoverFooter, PopoverBody, PopoverCloseButton, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, Button, useToast } from "@chakra-ui/react"
+import { useState } from "react"
+import { saveSession } from "../utils/sessions";
 
-function WalkthroughPopover() {
-  const initialFocusRef = useRef<HTMLButtonElement>(null)
+const PopMenu = () => {
+  const toast = useToast();
+  const [input, setInput] = useState<string>('');
+
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  const handleSession = async (name: string) => {
+      await saveSession(name);
+      toast({
+          title: 'Session Saved',
+          description: `Session ${name} has been saved`,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top-right'
+      });
+  }
+
   return (
     <Popover
-      initialFocusRef={initialFocusRef}
       placement='bottom'
       closeOnBlur={false}
     >
       <PopoverTrigger>
-        <Button>Trigger</Button>
+        <button className="task-bar">
+          <span className="hugeicons--folder-file-storage"></span>
+        </button>
       </PopoverTrigger>
       <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
         <PopoverHeader pt={4} fontWeight='bold' border='0'>
-          Manage Your Channels
+          Manage Your Session
         </PopoverHeader>
         <PopoverArrow bg='blue.800' />
         <PopoverCloseButton />
         <PopoverBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore.
+          <Input 
+            value={input} onChange={handleInput}
+            variant='flushed' placeholder='Session Name'
+            _placeholder={{ color: 'gray.500', fontSize: 'sm' }}
+          />
         </PopoverBody>
         <PopoverFooter
           border='0'
@@ -29,12 +52,10 @@ function WalkthroughPopover() {
           justifyContent='space-between'
           pb={4}
         >
-          <Box fontSize='sm'>Step 2 of 4</Box>
           <ButtonGroup size='sm'>
-            <Button colorScheme='green'>Setup Email</Button>
-            <Button colorScheme='blue' ref={initialFocusRef}>
-              Next
-            </Button>
+            <button onClick={() => handleSession(input)} className='bg-blue-500 px-3 py-1'>
+              Save
+            </button>
           </ButtonGroup>
         </PopoverFooter>
       </PopoverContent>
@@ -42,4 +63,4 @@ function WalkthroughPopover() {
   )
 }
 
-export default WalkthroughPopover;
+export default PopMenu;

@@ -1,11 +1,13 @@
 import { groupAllTabs } from '../utils/groups';
-import { saveSession } from '../utils/sessions';
 import { removeTab } from '../utils/tabs';
 import { WindowTab } from '../utils/windows';
 import './icons.css';
 import { Tooltip } from '@chakra-ui/react';
+import PopMenu from './Popver';
+import PopSess from './PopSess';
 
 const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWins: () => void, Open: () => void}) => {
+    
     const handleRemove = async () => {
         const select = await chrome.storage.local.get('filterTabs');
         if (select.filterTabs && select.filterTabs.length > 0) {
@@ -22,14 +24,13 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
             }
         }
     }
+    /*
     const onView = () => {
 
-    }
+    }*/
+   
     const handleGroup = async () => {
         await groupAllTabs();
-    }
-    const handleSession = async (name: string) => {
-        await saveSession(name);
     }
     
     return (
@@ -51,16 +52,12 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
                 </li>
                 <li>
                     <Tooltip hasArrow label='Save Sessions' bg='gray.600' className="text-white">
-                        <button className="task-bar">
-                            <span className="hugeicons--folder-file-storage"></span>
-                        </button>
+                        <PopMenu />
                     </Tooltip>
                 </li>
                 <li>
                     <Tooltip hasArrow label='Load sessions' bg='gray.600' className="text-white">
-                        <button className="task-bar">
-                            <span className="carbon--mobile-session"></span>
-                        </button>
+                      <PopSess />
                     </Tooltip>
                 </li>
                 <li>
@@ -77,13 +74,13 @@ const Footer = ({allWindow, Open, createWins}: {allWindow: WindowTab[], createWi
                         </button>
                     </Tooltip>
                 </li>                  
-                <li>
+                {/*<li>
                     <Tooltip hasArrow label='Change to Block View' bg='gray.600' className="text-white text-xs font-manrope">
                         <button onClick={onView} className="task-bar">
                             <span className="typcn--th-list-outline"></span> 
                         </button>
                     </Tooltip>
-                </li>
+                </li>*/}
             </ul>
         </footer>
     );
