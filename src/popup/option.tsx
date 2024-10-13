@@ -6,17 +6,24 @@ import { Switch,  FormControl, FormLabel,
     NumberDecrementStepper } from '@chakra-ui/react'
 import '../App.css';
 import { setMaxTabs } from '../utils/tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getMaxTabs } from '../utils/tabs';
+
 
 const OptionsPage = ({onBack}: {onBack: () => void}) => {
-    const [limit, ] = useState<number>(0);
-    const handleLimit = (valueAsString: string, valueAsNumber: number) => {
+    const [limit, setLimit] = useState<number>(0);
+    const handleLimit = async (valueAsString: string, valueAsNumber: number) => {
         // Set the new value for maxTabs
         void valueAsString;
-        setMaxTabs(valueAsNumber);
+        setLimit(valueAsNumber);
+        await setMaxTabs(valueAsNumber);
     };
-
-
+    useEffect(() => {
+        void (async () => {
+            const maxTabs = await getMaxTabs();
+            setLimit(maxTabs);
+        })()
+    }, [0]);
     return (
         <section className="bg-slate-100 text-base">
             <header className="flex items-center bg-white space-x-4 border-b p-4 w-full">
@@ -33,7 +40,7 @@ const OptionsPage = ({onBack}: {onBack: () => void}) => {
                         move new tabs to a new window or remove least used tab instead.
                         <br /><i>By default: 0</i>
                     </p>
-                    <NumberInput onChange={handleLimit} value={limit} defaultValue={0} max={30} min={0}>
+                    <NumberInput onChange={handleLimit} value={limit} defaultValue={limit} max={30} min={0}>
                         <NumberInputField />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
