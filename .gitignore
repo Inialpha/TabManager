@@ -14,7 +14,7 @@ dist/
 build/
 .esbuild/
 dist.zip
-
+*.zip
 # Vite cache
 .vite
 vite.svg

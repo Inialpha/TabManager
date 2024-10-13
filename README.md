@@ -11,7 +11,7 @@ Built with **React**, **TypeScript**, and **Vite**, this extension aims to reduc
 - **Delete Tabs**: Remove tabs that are no longer needed with a simple click.
 - **New Window Creation**: Create new windows and group your tabs automatically.
 - **Automatic Tab Closure**: Automatically closes duplicate tabs with the same URL to keep your workspace clutter-free.
-- **Max Tab Limit**: Set a maximum number of open tabs, and the extension will automatically close the oldest updated tab when the limit is reached.
+- **Max Tab Limit**: Set a maximum number of open tabs, and the extension will automatically close the least recently used tab when the limit is reached.
   
 ## Permissions
 
@@ -61,4 +61,4 @@ TabManager requires the following permissions:
 
 
 - **Inimfon Ebong**: [Email](inimfonebong001@gmail.com) [Twitter](https://twitter.com/Inimfon_Tech) [GitHub](https://github.com/Inialpha) [LinkedIn](https://www.linkedin.com/in/inimfon-ebong)
-- **Abdulrasheed Aliyu**: [Email](rashnotech@gmail.com) [Twitter]() [GitHub](https://github.com/Rashnotech) [LinkedIn]()
+- **Abdulrasheed Aliyu**: [Email](rashnotech@gmail.com) [Twitter](https://twitter.com/rashnotech) [GitHub](https://github.com/Rashnotech) [LinkedIn](https://www.linkedin.com/in/abdulrasheed-aliyu)

@@ -1,4 +1,4 @@
-import { Popover, Input, ButtonGroup, PopoverFooter, PopoverBody, PopoverCloseButton, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, Button, useToast } from "@chakra-ui/react"
+import { Popover, Input, ButtonGroup, PopoverFooter, PopoverBody, PopoverCloseButton, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, useToast } from "@chakra-ui/react"
 import { useState } from "react"
 import { saveSession } from "../utils/sessions";
 
