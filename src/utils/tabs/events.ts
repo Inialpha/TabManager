@@ -34,22 +34,23 @@ export const tabOnUpdated = async (
   tab: chrome.tabs.Tab
 ) => {
   try {
-    if (tab.id && tab.url) {
+    if (tab.id && tab.url && tab.status === "complete") {
       closeDuplicateTab(tab);
       const url = new URL(tab.url);
-      const hostName = url.hostname;
+      const address = url.hostname;
+
 
       if (!tabData[tab.id]) {
         tabData[tab.id] = {
-          groupName: hostName,
+          groupName: address,
           lastAccessed: Date.now(),
           groupId: undefined,
         };
-        
       } else {
-        tabData[tab.id].groupName = hostName;
+        tabData[tab.id].groupName = address;
         tabData[tab.id].lastAccessed = Date.now();
       }
+      
       const maxTabs = await getMaxTabs();
       const tabs = await getAllTabs();
       if (tabs.length > maxTabs) {
@@ -102,20 +103,20 @@ export const tabOnActivated = async (activeInfo: any) => {
 
     if (tab.url) {
       const url = new URL(tab.url);
-      const hostName = url.hostname;
+      const address = url.hostname;
 
       tabData[activeInfo.tabId] = {
-        groupName: hostName,
+        groupName: address,
         lastAccessed: Date.now(),
         groupId: undefined,
       };
 
-      if (!domainData[hostName]) {
-        domainData[hostName] = { startTime: 0, totalTime: 0 };
+      if (!domainData[address]) {
+        domainData[address] = { startTime: 0, totalTime: 0 };
       }
 
       // If domain is changed
-      if (hostName !== prevDomain) {
+      if (address !== prevDomain) {
         // Stop the timer for the previous domain
         if (prevDomain && domainData[prevDomain]) {
           domainData[prevDomain].totalTime +=
@@ -123,8 +124,8 @@ export const tabOnActivated = async (activeInfo: any) => {
         }
 
         // Start the timer for the new domain
-        domainData[hostName].startTime = Date.now();
-        prevDomain = hostName;
+        domainData[address].startTime = Date.now();
+        prevDomain = address;
       }
     }
   } catch (error) {
@@ -135,11 +136,11 @@ export const tabOnActivated = async (activeInfo: any) => {
 export const tabOnRemoved = async (tabId: number, _removeInfo: object) => {
   try {
     if (tabData[tabId]) {
-      const hostName = tabData[tabId].groupName;
+      const address = tabData[tabId].groupName;
 
-      if (domainData[hostName]) {
-        domainData[hostName].totalTime +=
-          Date.now() - domainData[hostName].startTime;
+      if (domainData[address]) {
+        domainData[address].totalTime +=
+          Date.now() - domainData[address].startTime;
       }
     }
   } catch (error) {
@@ -147,16 +148,16 @@ export const tabOnRemoved = async (tabId: number, _removeInfo: object) => {
   }
 };
 
-export async function closeLeastRecentlyUsedTab(_tabs: Tab[]) {
+export async function closeLeastRecentlyUsedTab(tabs: Tab[]) {
   try {
-    const sortedTabs = Object.entries(tabData).sort(
-      ([, a], [, b]) => a.lastAccessed - b.lastAccessed
+    const sortedTabs = tabs.sort(
+      (a, b) => (a.lastAccessed ?? 0) - (b.lastAccessed ?? 0)
     );
     if (sortedTabs.length > 0) {
       const oldestTab = sortedTabs[0];
-      const id: number = Number(oldestTab[0]);
+      const id: number = Number(oldestTab.id);
       delete tabData[id];
-      await chrome.tabs.remove(Number(oldestTab[0]));
+      await chrome.tabs.remove(Number(oldestTab.id));
     }
   } catch (error) {
     console.log("in closeLeastRecentlyUsedTab:", error);
@@ -175,7 +176,7 @@ export async function getMaxTabs(): Promise<number> {
   let maxTab: number;
   try {
     const data = await chrome.storage.sync.get("maxTabs");
-    maxTab = data.maxTab || 30;
+    maxTab = data.maxTabs || 30;
   } catch (error) {
     console.log(error);
     maxTab = 30;

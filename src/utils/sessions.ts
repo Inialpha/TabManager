@@ -15,9 +15,8 @@ export async function saveSession(sessionName: string) {
   const windows: WindowTab[] = await getOpenWindows();
   const windowIds: number[] = windows.map((win: WindowTab) => win.id)
   .filter((id): id is number => id !== undefined);
-  for (let id of windowIds) {
-    saveWindow(id);
-  }
+
+  await Promise.all(windowIds.map(id => saveWindow(id)));
   const sessionData: Session = {
     id: uuidv4(),
     name: sessionName,

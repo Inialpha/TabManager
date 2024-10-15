@@ -5,12 +5,12 @@ export async function groupTabsByHostname(tabs: Tab[]) {
     const grouped = tabs.reduce((acc: {[key: string]: chrome.tabs.Tab[]}, tab) => {
       if (tab.url) {
         const url = new URL(tab.url);
-        const hostname = url.hostname;
+        const address = url.hostname;
 
-        if (!acc[hostname]) {
-          acc[hostname] = [];
+        if (!acc[address]) {
+          acc[address] = [];
         }
-        acc[hostname].push(tab);
+        acc[address].push(tab);
       }
       return acc;
     }, {});
@@ -26,10 +26,10 @@ export async function groupAllTabs() {
   const tabs: Tab[] = await getAllTabs();
   const groupedTabs = await groupTabsByHostname(tabs);
   
-  const groupPromises = groupedTabs ? Object.entries(groupedTabs).map(([hostName, tabs]) => {
+  const groupPromises = groupedTabs ? Object.entries(groupedTabs).map(([address, tabs]) => {
     if (tabs.length > 1) {
       const tabIds = tabs.map(tab => tab.id).filter(id => id !== undefined) as number[];
-      return addToGroup(tabIds, hostName);
+      return addToGroup(tabIds, address);
     }
   }) : [];
   await Promise.all(groupPromises);
@@ -42,7 +42,6 @@ export async function addToGroup(tabIds: number | number[], groupTitle: string) 
   let groupId: number | undefined;
   try {
     const group = await getGroup(groupTitle);
-    console.log("group: ", group);
     if (group) {
       groupId = await chrome.tabs.group({
         tabIds: tabIds,
@@ -53,7 +52,7 @@ export async function addToGroup(tabIds: number | number[], groupTitle: string) 
         tabIds: tabIds
       });
       if (groupId) {
-        //await updateTabGroup(groupId, {title: groupTitle});
+        await updateTabGroup(groupId, {title: groupTitle});
       }
     }
   } catch (error) {
@@ -87,7 +86,7 @@ export async function updateTabGroup(groupId: number, data: object) {
   try {
      groupId;
      data;
-    //await chrome.tabGroups.update(groupId, data)
+     await chrome.tabGroups.update(groupId, data)
 
   } catch (error) {
     console.error(`Failed to update tab group: ${error}`);
