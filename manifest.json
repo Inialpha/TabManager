@@ -7,8 +7,7 @@
     "tabs",
     "windows",
     "storage",
-    "tabGroups",
-    "notifications"
+    "tabGroups"
   ],
   "background": {
     "service_worker": "src/background/background.js"

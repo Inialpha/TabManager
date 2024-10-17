@@ -7,11 +7,6 @@ const PopSess = () => {
     
     const deleteSess = async (name: string) => {
         await deleteSession(name);
-        setSession(prev => {
-            const newSessions = { ...prev };
-            delete newSessions[name];
-            return newSessions;
-        });
     }
 
     useEffect(() => {
@@ -25,7 +20,7 @@ const PopSess = () => {
         };
 
         fetchSession();  // Call fetch function on mount
-    }, []);  // Empty dependency array ensures this runs only once
+    }, [deleteSess]);  // Empty dependency array ensures this runs only once
 
 
     const loadSess = async (name: string) => {

@@ -4,6 +4,12 @@ export type WindowTab = chrome.windows.Window & {
   groups?: chrome.tabGroups.TabGroup[];
 };
 
+export interface NewTab {
+  url: string | undefined;
+  active: boolean | undefined;
+  windowId: number | undefined;
+}
+
 export async function getOpenWindows(): Promise<WindowTab[]> {
   try {
     let windows: WindowType[] = await chrome.windows.getAll({
@@ -49,13 +55,16 @@ export async function getOpenWinById(
   return win;
 }
 
-export async function saveWindow(windowId: number) {
-  let win: WindowType;
+
+
+export async function saveWindow(win: WindowTab) {
   try {
-    win = await chrome.windows.get(windowId);
-    const windows: Record<number, WindowType> = await getSavedWindows();
+    console.log("Window to save: ", win);
+    const windows: Record<number, WindowTab> = await getSavedWindows();
+
     if (win.id !== undefined) {
       windows[win.id] = win;
+      console.log('Populated window: ', windows[win.id]);
       await chrome.storage.sync.set({ windows });
     }
   } catch (error) {
@@ -63,8 +72,8 @@ export async function saveWindow(windowId: number) {
   }
 }
 
-export async function getSavedWindows(): Promise<Record<number, WindowType>> {
-  let windows: Record<number, WindowType>;
+export async function getSavedWindows(): Promise<Record<number, WindowTab>> {
+  let windows: Record<number, WindowTab>;
   let storage: any;
   try {
     storage = await chrome.storage.sync.get("windows");
