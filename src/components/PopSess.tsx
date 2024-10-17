@@ -7,6 +7,11 @@ const PopSess = () => {
     
     const deleteSess = async (name: string) => {
         await deleteSession(name);
+        setSession(prev => {
+            const newSessions = { ...prev };
+            delete newSessions[name];
+            return newSessions;
+        });
     }
 
     useEffect(() => {
@@ -25,6 +30,7 @@ const PopSess = () => {
 
     const loadSess = async (name: string) => {
         await loadSession(name);
+        await deleteSess(name);
     }
 
     return (
